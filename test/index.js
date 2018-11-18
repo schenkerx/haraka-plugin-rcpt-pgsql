@@ -25,7 +25,7 @@ describe('load_rcpt_to_pg_ini', function () {
 
     it('initializes enabled boolean', function (done) {
         this.plugin.load_rcpt_to_pg_ini();
-        assert.equal(this.plugin.cfg.rcpt.authoratative, true, this.plugin.cfg);
+        assert.equal(this.plugin.cfg.rcpt.authoritative, true, this.plugin.cfg);
         assert.equal(this.plugin.cfg.database.enableSSL, false, this.plugin.cfg);
         done();
     });

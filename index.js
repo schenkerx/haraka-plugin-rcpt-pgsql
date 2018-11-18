@@ -2,12 +2,11 @@
 
 const pg = require('pg');
 const constants = require('haraka-constants');
+const Address = require('address-rfc2821').Address;
 
 exports.register = function () {
     const plugin = this;
-    plugin.inherits('rcpt_to.host_list_base');
 
-    plugin.load_host_list();
     plugin.load_rcpt_to_pg_ini();
 
     const config = plugin.cfg;
@@ -24,9 +23,9 @@ exports.register = function () {
             sslCA: config.database.sslCA
         } : false
     };
-    plugin.pool = pg.Pool(dbConfig);
+    plugin.pool = new pg.Pool(dbConfig);
     plugin.pool.on('error', (err, _) => {
-        this.logerror('Idle client error. Probably a network issue or a database restart.'
+        connection.logerror(plugin, 'Idle client error. Probably a network issue or a database restart.'
             + err.message + err.stack);
     });
     plugin.aliasQuery = config.database.aliasQuery;
@@ -45,7 +44,7 @@ exports.load_rcpt_to_pg_ini = function () {
 
     plugin.cfg = plugin.config.get('rcpt_to.pg.ini', {
         booleans: [
-            '+rcpt.authoratative',
+            '+rcpt.authoritative',
             '-database.enableSSL'
         ]
     },
@@ -54,10 +53,51 @@ exports.load_rcpt_to_pg_ini = function () {
     });
 }
 
-exports.aliases = (next, connection, params) => {
+exports.aliases = function (next, connection, params) {
+    const plugin = this;
+    const tx = connection.transaction;
+    if (!tx) return next();
 
+    const rcpt = params[0];
+    (async () => {
+        const client = await plugin.pool.connect();
+        try {
+            const result = await client.query(plugin.aliasQuery, [rcpt.user+"@"+rcpt.host]);
+            if (result.rowCount != 0) {
+                const destination = result.rows[0].destination;
+                connection.logdebug(plugin, "aliasing " + tx.rcpt_to + " to " + destination);
+                tx.rcpt_to.pop();
+                tx.rcpt_to.push(new Address(`<${destination}>`));
+            }
+            next();
+        } finally {
+            client.release();
+        }
+    })().catch(e => {
+        connection.logerror(plugin, "Unable to query alias. " + e.stack);
+        next(constants.DENYSOFT);
+    });
 }
 
-exports.validate = (next, connection, params) => {
+exports.validate = function (next, connection, params) {
+    const plugin = this;
+    const tx = connection.transaction;
+    const rcpt = tx.rcpt_to[0];
 
+    (async () => {
+        const client = await plugin.pool.connect();
+        try {
+            const result = await client.query(plugin.accountQuery, [rcpt.user+"@"+rcpt.host]);
+            if (result.rows[0].exists) {
+                plugin.cfg.rcpt.authoritative ? next(constants.OK) : next();
+            } else {
+                next(constants.DENY);
+            }
+        } finally {
+            client.release();
+        }
+    })().catch(e => {
+        connection.logerror(plugin, "Unable to validate " + rcpt.user + "@" + rcpt.host + ". " + e.stack);
+        next(constants.DENYSOFT);
+    });
 }

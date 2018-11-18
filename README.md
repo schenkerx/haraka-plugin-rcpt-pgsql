@@ -6,6 +6,5 @@ The plugin have almost no assumption on your database schema. It is completely c
 
 The logic that is followed is:
 
-- Check if the recipient is for a local domain (ie. check if the domaiin is present in host_list)
 - Run an query to see if the recipient is one of the aliases of an exists user. If yes, redirect the email to that user.
 - Run an query to validate if the user exists in records.
