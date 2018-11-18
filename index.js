@@ -83,6 +83,8 @@ exports.validate = function (next, connection, params) {
     const plugin = this;
     const tx = connection.transaction;
     const rcpt = tx.rcpt_to[0];
+    // Do not validate recipient when sending email
+    if (connection.relaying) next(constants.OK);
 
     (async () => {
         const client = await plugin.pool.connect();
