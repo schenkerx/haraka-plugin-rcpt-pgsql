@@ -1,0 +1,38 @@
+{
+  "name": "haraka-plugin-rcpt-pg",
+  "version": "1.0.0",
+  "description": "Haraka plugin that validate receipients and process aliases with postgresql",
+  "main": "index.js",
+  "scripts": {
+    "lint": "./node_modules/.bin/eslint *.js test/**/*.js",
+    "lintfix": "./node_modules/.bin/eslint --fix *.js test/**/*.js",
+    "cover": "./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha",
+    "test": "./node_modules/.bin/_mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schenkerx/haraka-plugin-rcpt-pg.git"
+  },
+  "keywords": [
+    "haraka",
+    "plugin",
+    "postgresql",
+    "pg",
+    "postgres"
+  ],
+  "author": "Yongsheng Xie <yongs.xie@http418.org>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/schenkerx/haraka-plugin-rcpt-pg/issues"
+  },
+  "homepage": "https://github.com/schenkerx/haraka-plugin-rcpt-pg#readme",
+  "devDependencies": {
+    "eslint": ">=3",
+    "eslint-plugin-haraka": "*",
+    "haraka-test-fixtures": "*",
+    "mocha": "*"
+  },
+  "dependencies": {
+    "pg": "^7.6.1"
+  }
+}
