@@ -1,4 +1,4 @@
-# haraka-plugin-rcpt-pg
+# haraka-plugin-rcpt-pgsql
 
 This plugin tries to validate recipients against a PostgreSQL compatible database. This will help in authenticating users by PostgreSQL databases with Haraka.
 

@@ -1,5 +1,5 @@
 {
-  "name": "haraka-plugin-rcpt-pg",
+  "name": "haraka-plugin-rcpt-pgsql",
   "version": "1.0.0",
   "description": "Haraka plugin that validate receipients and process aliases with postgresql",
   "main": "index.js",
@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/schenkerx/haraka-plugin-rcpt-pg.git"
+    "url": "git+https://github.com/schenkerx/haraka-plugin-rcpt-pgsql.git"
   },
   "keywords": [
     "haraka",
@@ -23,9 +23,9 @@
   "author": "Yongsheng Xie <yongs.xie@http418.org>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/schenkerx/haraka-plugin-rcpt-pg/issues"
+    "url": "https://github.com/schenkerx/haraka-plugin-rcpt-pgsql/issues"
   },
-  "homepage": "https://github.com/schenkerx/haraka-plugin-rcpt-pg#readme",
+  "homepage": "https://github.com/schenkerx/haraka-plugin-rcpt-pgsql#readme",
   "devDependencies": {
     "eslint": ">=3",
     "eslint-plugin-haraka": "*",
