@@ -1,6 +1,6 @@
 {
   "name": "haraka-plugin-rcpt-pgsql",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Haraka plugin that validate receipients and process aliases with postgresql",
   "main": "index.js",
   "scripts": {
