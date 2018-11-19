@@ -57,6 +57,8 @@ exports.aliases = function (next, connection, params) {
     const plugin = this;
     const tx = connection.transaction;
     if (!tx) return next();
+    // Do not alias when sending email
+    if (connection.relaying) next();
 
     const rcpt = params[0];
     (async () => {
